@@ -1,6 +1,8 @@
 # vite-tagger
 
 <div align="center">
+  <img src="https://raw.githubusercontent.com/npm/logos/master/npm%20logo/npm-logo-red.png" alt="npm logo" width="200" />
+  
   <p>A Vite plugin that automatically adds debug attributes to JSX elements for development</p>
   
   <p>
