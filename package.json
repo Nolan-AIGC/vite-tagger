@@ -1,6 +1,6 @@
 {
   "name": "vite-tagger",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Vite plugin that automatically adds debug attributes to JSX elements for development",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
