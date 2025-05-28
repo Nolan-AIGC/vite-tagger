@@ -1,10 +1,10 @@
-name: Version Bump
+name: 版本更新与NPM发布
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: "版本更新类型 (patch, minor, major)"
+        description: "版本类型"
         required: true
         default: "patch"
         type: choice
@@ -21,7 +21,7 @@ permissions:
   contents: write
 
 jobs:
-  bump-version:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,38 +29,35 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Git
+      - name: 设置Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v2
         with:
           version: 8
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
+          registry-url: "https://registry.npmjs.org"
           cache: "pnpm"
 
-      - name: Install dependencies
-        run: pnpm install
+      - run: pnpm install
 
-      - name: Commit any pending changes
+      - name: 更新版本
         run: |
-          git add .
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update files before version bump"
+          npm version ${{ github.event.inputs.version }} -m "release: %s ${{ github.event.inputs.message || '' }}"
 
-      - name: Bump version
-        id: bump
-        run: |
-          VERSION_TYPE=${{ github.event.inputs.version }}
-          npm version $VERSION_TYPE -m "chore: release %s ${{ github.event.inputs.message || '' }}"
-          echo "new_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      - run: pnpm build
 
-      - name: Push changes
+      - name: 推送变更
         run: |
           git push
           git push --tags
+
+      - name: 发布到NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
