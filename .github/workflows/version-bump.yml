@@ -1,0 +1,57 @@
+name: Version Bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "版本更新类型 (patch, minor, major)"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      message:
+        description: "发布说明"
+        required: false
+        type: string
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Bump version
+        id: bump
+        run: |
+          VERSION_TYPE=${{ github.event.inputs.version }}
+          npm version $VERSION_TYPE -m "chore: release %s ${{ github.event.inputs.message || '' }}"
+          echo "new_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Push changes
+        run: |
+          git push
+          git push --tags
