@@ -61,6 +61,26 @@ export interface ViteTaggerOptions {
    * Default: true
    */
   filter3DElements?: boolean;
+  /**
+   * 要包含的属性列表
+   * 默认值: ['id', 'name', 'path', 'line', 'file', 'content']
+   * 'id': data-{prefix}-id 属性
+   * 'name': data-{prefix}-name 属性
+   * 'path': data-component-path 属性
+   * 'line': data-component-line 属性
+   * 'file': data-component-file 属性
+   * 'content': data-component-content 属性
+   *
+   * List of attributes to include
+   * Default: ['id', 'name', 'path', 'line', 'file', 'content']
+   * 'id': data-{prefix}-id attribute
+   * 'name': data-{prefix}-name attribute
+   * 'path': data-component-path attribute
+   * 'line': data-component-line attribute
+   * 'file': data-component-file attribute
+   * 'content': data-component-content attribute
+   */
+  attributesToInclude?: string[];
 }
 
 // Three.js 和 Drei 元素列表
@@ -354,6 +374,7 @@ export function viteTagger(options: ViteTaggerOptions = {}): Plugin {
     useRelativePath = true,
     debug = false,
     filter3DElements = true,
+    attributesToInclude = ["id", "name", "path", "line", "file", "content"],
   } = options;
 
   // 统计信息
@@ -535,24 +556,58 @@ export function viteTagger(options: ViteTaggerOptions = {}): Plugin {
                 // 检查content是否为空对象
                 const isContentEmpty = Object.keys(content).length === 0;
 
-                // 构建 Legacy 属性
-                const legacyAttrs = [
-                  `data-component-path="${relativePath}"`,
-                  `data-component-line="${line}"`,
-                  `data-component-file="${fileName}"`,
-                  `data-component-name="${elementName}"`,
-                  // 只有在content非空时才添加data-component-content属性
-                  ...(isContentEmpty
-                    ? []
-                    : [
-                        `data-component-content="${encodeURIComponent(
-                          JSON.stringify(content)
-                        )}"`,
-                      ]),
-                ].join(" ");
+                // 构建属性字符串数组
+                const attrArray = [];
+
+                // 添加 id 属性
+                if (attributesToInclude.includes("id")) {
+                  attrArray.push(`data-${prefixName}-id="${dataComponentId}"`);
+                }
+
+                // 添加 name 属性
+                if (attributesToInclude.includes("name")) {
+                  attrArray.push(`data-${prefixName}-name="${elementName}"`);
+                }
+
+                // 添加 path 属性
+                if (attributesToInclude.includes("path")) {
+                  attrArray.push(`data-component-path="${relativePath}"`);
+                }
+
+                // 添加 line 属性
+                if (attributesToInclude.includes("line")) {
+                  attrArray.push(`data-component-line="${line}"`);
+                }
+
+                // 添加 file 属性
+                if (attributesToInclude.includes("file")) {
+                  attrArray.push(`data-component-file="${fileName}"`);
+                }
+
+                // 添加元素名称属性 (legacy)
+                if (attributesToInclude.includes("name")) {
+                  attrArray.push(`data-component-name="${elementName}"`);
+                }
+
+                // 添加 content 属性
+                if (
+                  attributesToInclude.includes("content") &&
+                  !isContentEmpty
+                ) {
+                  attrArray.push(
+                    `data-component-content="${encodeURIComponent(
+                      JSON.stringify(content)
+                    )}"`
+                  );
+                }
+
+                // 如果没有属性要添加，则跳过
+                if (attrArray.length === 0) {
+                  return;
+                }
 
                 // 构建完整的属性字符串
-                const attrString = ` data-${prefixName}-id="${dataComponentId}" data-${prefixName}-name="${elementName}" ${legacyAttrs}`;
+                const attrString = ` ${attrArray.join(" ")}`;
 
                 // 在标签名后添加属性
                 const tagNameEnd = jsxNode.name.end!;
@@ -562,9 +617,14 @@ export function viteTagger(options: ViteTaggerOptions = {}): Plugin {
 
                 if (debug) {
                   console.log(
-                    `[vite-tagger] Added data-${prefixName}-id="${dataComponentId}" to <${elementName}>`
+                    `[vite-tagger] Added ${attrArray.length} attributes to <${elementName}> at ${relativePath}:${line}:${col}`
                   );
-                  console.log(`[vite-tagger] Content extracted:`, content);
+                  if (
+                    attributesToInclude.includes("content") &&
+                    !isContentEmpty
+                  ) {
+                    console.log(`[vite-tagger] Content extracted:`, content);
+                  }
                 }
               }
             }
