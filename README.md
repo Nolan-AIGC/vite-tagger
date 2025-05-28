@@ -9,9 +9,6 @@
     <a href="https://www.npmjs.com/package/vite-tagger">
       <img src="https://img.shields.io/npm/v/vite-tagger.svg" alt="npm version" />
     </a>
-    <a href="https://www.npmjs.com/package/vite-tagger">
-      <img src="https://img.shields.io/npm/dm/vite-tagger.svg" alt="npm downloads" />
-    </a>
     <a href="https://github.com/kcsx/vite-tagger/blob/main/LICENSE">
       <img src="https://img.shields.io/npm/l/vite-tagger.svg" alt="license" />
     </a>
