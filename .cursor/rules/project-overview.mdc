@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Vite Tagger 项目概述
+
+这是一个Vite插件，用于自动为JSX元素添加调试属性，主要用于开发环境。插件会在HTML元素上添加类似`data-vt-id`和`data-vt-name`等属性，帮助开发者在浏览器中识别和调试元素。
+
+## 核心文件
+
+- [src/index.ts](mdc:src/index.ts) - 插件的主要实现文件
+- [src/index.test.ts](mdc:src/index.test.ts) - 测试文件
+- [package.json](mdc:package.json) - 项目配置和依赖
+
+## 构建和测试
+
+- 使用`pnpm build`构建项目
+- 使用`pnpm test`运行测试
+- 使用`pnpm test:watch`运行测试并监视文件变化
+- 使用`pnpm test:ui`在UI界面中运行测试

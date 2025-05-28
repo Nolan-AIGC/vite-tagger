@@ -1,0 +1,41 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Vite Tagger 实现细节
+
+## 核心实现
+
+插件使用 [Babel](mdc:https:/babeljs.io) 解析JSX代码并使用 [estree-walker](mdc:https:/github.com/Rich-Harris/estree-walker) 遍历语法树，找到所有HTML元素并添加调试属性。
+
+主要处理流程在 [src/index.ts](mdc:src/index.ts) 的 `viteTagger` 函数中：
+
+1. 解析配置选项
+2. 解析源代码为AST
+3. 遍历AST查找JSX元素
+4. 为符合条件的元素添加调试属性
+5. 返回修改后的代码
+
+## 关键处理逻辑
+
+### 元素内容提取
+
+元素内容提取逻辑位于 `transform` 方法中：
+
+1. 提取元素的文本内容（递归处理嵌套元素）
+2. 提取元素的关键属性（placeholder、className、id、title、alt等）
+3. 构建content对象
+4. 当content为空对象时，不添加`data-component-content`属性
+
+### 3D元素过滤
+
+插件内置了 Three.js 和 Drei 元素列表，可以通过配置选项 `filter3DElements` 来控制是否过滤这些3D元素。
+
+## 测试
+
+[src/index.test.ts](mdc:src/index.test.ts) 包含了多个测试用例，验证插件的核心功能：
+
+1. 测试文本内容提取
+2. 测试简单按钮处理
+3. 测试空内容元素不添加content属性

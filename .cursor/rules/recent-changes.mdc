@@ -1,0 +1,40 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 最近更改
+
+## 优化空内容元素
+
+在最近的更新中，我们修复了一个问题：对于没有内容的元素（如 `<input>`、`<img>`、`<br>` 等），之前会添加空的 `data-component-content="%7B%7D"` 属性。
+
+现在的实现会检查 content 对象是否为空，如果为空则不添加该属性，使得生成的HTML更加简洁。
+
+相关更改：
+
+1. 添加检查：`const isContentEmpty = Object.keys(content).length === 0;`
+2. 条件添加属性：
+   ```js
+   ...(isContentEmpty
+     ? []
+     : [`data-component-content="${encodeURIComponent(JSON.stringify(content))}"`])
+   ```
+
+## 测试改进
+
+添加了新的测试用例，专门验证空内容元素不会添加 `data-component-content` 属性：
+
+```js
+it("should not add data-component-content for empty content objects", async () => {
+  // 测试代码
+});
+```
+
+## 开发工具改进
+
+更新了测试脚本，改进开发体验：
+
+1. `test`: 运行测试后自动退出（vitest run）
+2. `test:watch`: 运行测试并监视文件变化（vitest）
+3. `test:ui`: 在UI界面中运行测试（vitest --ui）

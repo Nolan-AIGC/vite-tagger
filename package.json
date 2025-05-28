@@ -1,0 +1,75 @@
+{
+  "name": "vite-tagger",
+  "version": "1.0.1",
+  "description": "A Vite plugin that automatically adds debug attributes to JSX elements for development",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest",
+    "release:patch": "npm version patch && npm run build && npm publish",
+    "release:minor": "npm version minor && npm run build && npm publish",
+    "release:major": "npm version major && npm run build && npm publish"
+  },
+  "keywords": [
+    "vite",
+    "plugin",
+    "jsx",
+    "debug",
+    "development",
+    "react",
+    "tsx",
+    "tagger",
+    "attributes",
+    "dom"
+  ],
+  "author": "kcsx",
+  "license": "MIT",
+  "peerDependencies": {
+    "vite": ">=2.0.0"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.23.0",
+    "@babel/types": "^7.23.0",
+    "estree-walker": "^3.0.3",
+    "magic-string": "^0.30.5"
+  },
+  "devDependencies": {
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__traverse": "^7.20.6",
+    "@types/estree": "^1.0.5",
+    "@types/node": "^18.0.0",
+    "@vitest/ui": "^3.1.4",
+    "tsup": "^8.0.1",
+    "typescript": "^5.2.0",
+    "vitest": "^3.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kcsx/vite-tagger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kcsx/vite-tagger/issues"
+  },
+  "homepage": "https://github.com/kcsx/vite-tagger#readme",
+  "engines": {
+    "node": ">=16"
+  }
+}

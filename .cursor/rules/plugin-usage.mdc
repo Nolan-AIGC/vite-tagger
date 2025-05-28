@@ -1,0 +1,58 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Vite Tagger 使用指南
+
+## 安装
+
+```bash
+npm install vite-tagger --save-dev
+# 或
+pnpm add -D vite-tagger
+# 或
+yarn add -D vite-tagger
+```
+
+## 配置
+
+在Vite配置文件中添加插件：
+
+```js
+// vite.config.js / vite.config.ts
+import { defineConfig } from 'vite';
+import { viteTagger } from 'vite-tagger';
+
+export default defineConfig({
+  plugins: [
+    viteTagger({
+      // 配置选项
+      enabled: true,                   // 是否启用插件（默认仅在开发模式启用）
+      prefixName: 'vt',                // 自定义前缀名称（默认为'vt'）
+      include: ['.tsx', '.jsx'],       // 包含的文件扩展名
+      exclude: ['node_modules'],       // 排除的文件路径模式
+      useRelativePath: true,           // 是否使用相对路径（默认true）
+      debug: false,                    // 是否启用调试日志
+      filter3DElements: true           // 是否过滤3D元素（three.js/drei）
+    })
+  ]
+});
+```
+
+## 特性
+
+1. 为HTML元素添加调试属性，包括：
+   - `data-vt-id`: 元素唯一标识符，包含文件路径、行号和列号
+   - `data-vt-name`: 元素名称
+   - `data-component-path`: 元素所在文件的路径（兼容性属性）
+   - `data-component-line`: 元素在源代码中的行号（兼容性属性）
+   - `data-component-file`: 元素所在的文件名（兼容性属性）
+   - `data-component-name`: 元素名称（兼容性属性）
+   - `data-component-content`: 元素内容的JSON表示（仅在内容非空时添加）
+
+2. 自动跳过：
+   - React组件（首字母大写的元素）
+   - Fragment组件
+   - 配置的排除文件
+   - 3D元素（如果启用filter3DElements）
