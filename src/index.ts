@@ -6,38 +6,59 @@ import { Plugin } from "vite";
 
 export interface ViteTaggerOptions {
   /**
-   * 是否启用插件（默认仅在开发模式启用）
-   * Whether to enable the plugin (defaults to development mode only)
+   * 是否启用插件
+   * 默认值: 在开发环境(development)下为 true，生产环境下为 false
+   *
+   * Whether to enable the plugin
+   * Default: true in development environment, false in production
    */
   enabled?: boolean;
   /**
-   * 自定义前缀名称（默认为 'vt'，对应 data-vt-id, data-vt-name 等）
-   * Custom prefix name (defaults to 'vt', creates data-vt-id, data-vt-name, etc.)
+   * 自定义前缀名称
+   * 默认值: 'vt'，生成的属性为 data-vt-id, data-vt-name 等
+   *
+   * Custom prefix name
+   * Default: 'vt', generates attributes like data-vt-id, data-vt-name, etc.
    */
   prefixName?: string;
   /**
    * 包含的文件扩展名
+   * 默认值: ['.tsx', '.jsx']
+   *
    * File extensions to include
+   * Default: ['.tsx', '.jsx']
    */
   include?: string[];
   /**
    * 排除的文件路径模式
+   * 默认值: ['node_modules']
+   *
    * File path patterns to exclude
+   * Default: ['node_modules']
    */
   exclude?: string[];
   /**
-   * 是否使用相对路径（默认 true）
-   * Whether to use relative paths (defaults to true)
+   * 是否使用相对路径
+   * 默认值: true
+   *
+   * Whether to use relative paths
+   * Default: true
    */
   useRelativePath?: boolean;
   /**
    * 是否启用调试日志
+   * 默认值: false
+   *
    * Whether to enable debug logging
+   * Default: false
    */
   debug?: boolean;
   /**
    * 是否过滤 3D 元素 (three.js/drei)
+   * 默认值: true
+   *
    * Whether to filter 3D elements (three.js/drei)
+   * Default: true
    */
   filter3DElements?: boolean;
 }
