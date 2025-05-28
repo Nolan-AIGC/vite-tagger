@@ -26,6 +26,7 @@
 - 🎨 **3D Framework Support**: Intelligently filters Three.js and Drei elements
 - ⚡ **Development Mode Only**: Runs only in development mode by default
 - 🛠️ **Highly Configurable**: Custom prefixes, include/exclude patterns, and more
+- 🎛️ **Customizable Attributes**: Control which debug attributes are added to elements
 - 📦 **Zero Runtime**: Does not affect production builds
 - 🌏 **TypeScript Support**: Full TypeScript support and type definitions
 
@@ -80,6 +81,8 @@ export default defineConfig({
       filter3DElements: false,
       // Force enable in production (not recommended)
       enabled: true,
+      // Custom attributes to include
+      attributesToInclude: ["id", "name", "line"],
     }),
   ],
 });
@@ -145,15 +148,16 @@ function App() {
 
 ## ⚙️ Configuration Options
 
-| Option             | Type       | Default                      | Description                        |
-| ------------------ | ---------- | ---------------------------- | ---------------------------------- |
-| `enabled`          | `boolean`  | `NODE_ENV === 'development'` | Whether to enable the plugin       |
-| `prefixName`       | `string`   | `'vt'`                       | Custom prefix for debug attributes |
-| `include`          | `string[]` | `['.tsx', '.jsx']`           | File extensions to process         |
-| `exclude`          | `string[]` | `['node_modules']`           | Paths to exclude                   |
-| `useRelativePath`  | `boolean`  | `true`                       | Use relative paths in debug info   |
-| `debug`            | `boolean`  | `false`                      | Enable debug logging               |
-| `filter3DElements` | `boolean`  | `true`                       | Filter out Three.js/Drei elements  |
+| Option                | Type       | Default                                             | Description                           |
+| --------------------- | ---------- | --------------------------------------------------- | ------------------------------------- |
+| `enabled`             | `boolean`  | `NODE_ENV === 'development'`                        | Whether to enable the plugin          |
+| `prefixName`          | `string`   | `'vt'`                                              | Custom prefix for debug attributes    |
+| `include`             | `string[]` | `['.tsx', '.jsx']`                                  | File extensions to process            |
+| `exclude`             | `string[]` | `['node_modules']`                                  | Paths to exclude                      |
+| `useRelativePath`     | `boolean`  | `true`                                              | Use relative paths in debug info      |
+| `debug`               | `boolean`  | `false`                                             | Enable debug logging                  |
+| `filter3DElements`    | `boolean`  | `true`                                              | Filter out Three.js/Drei elements     |
+| `attributesToInclude` | `string[]` | `['id', 'name', 'path', 'line', 'file', 'content']` | Attributes to include in debug output |
 
 ## 🎨 Debug Attributes Explained
 
@@ -173,6 +177,28 @@ The plugin adds these debug attributes to help with development:
 - `data-component-content`: Encoded element content (text, class names, placeholders)
 
 Note: `data-component-content` is only added when there's actual content to display.
+
+### Customizing Attributes
+
+You can control which attributes are included using the `attributesToInclude` option:
+
+```javascript
+viteTagger({
+  // Only include ID and name attributes
+  attributesToInclude: ["id", "name"],
+});
+```
+
+Available attribute keys:
+
+- `'id'`: Adds `data-{prefix}-id` attribute
+- `'name'`: Adds `data-{prefix}-name` and `data-component-name` attributes
+- `'path'`: Adds `data-component-path` attribute
+- `'line'`: Adds `data-component-line` attribute
+- `'file'`: Adds `data-component-file` attribute
+- `'content'`: Adds `data-component-content` attribute (when content exists)
+
+By default, all attributes are included.
 
 ## 🌍 Framework Support
 

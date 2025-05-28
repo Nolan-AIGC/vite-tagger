@@ -44,6 +44,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Commit any pending changes
+        run: |
+          git add .
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update files before version bump"
+
       - name: Bump version
         id: bump
         run: |
