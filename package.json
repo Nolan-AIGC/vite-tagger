@@ -40,7 +40,7 @@
     "attributes",
     "dom"
   ],
-  "author": "KanChaiShaoXia",
+  "author": "Nolan",
   "license": "MIT",
   "peerDependencies": {
     "vite": ">=2.0.0"
@@ -63,12 +63,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kanchaishaoxia/vite-tagger.git"
+    "url": "https://github.com/nolan-yan/vite-tagger.git"
   },
   "bugs": {
-    "url": "https://github.com/kanchaishaoxia/vite-tagger/issues"
+    "url": "https://github.com/nolan-yan/vite-tagger/issues"
   },
-  "homepage": "https://github.com/kanchaishaoxia/vite-tagger#readme",
+  "homepage": "https://github.com/nolan-yan/vite-tagger#readme",
   "engines": {
     "node": ">=16"
   }
